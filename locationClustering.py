@@ -13,7 +13,7 @@ from modelCreate import createKMeans,createAgglomerate,createDBSCAN
 from modelCreate import calculateSSE,calculateDaviesBouldin
 from visualClustering import visualClusterResult,plotSilhouetteValues
 from genPetData import getCsv
-from plotApplication import plotModelCSM
+from plotApplication import plotModelCSM,plotCLusteringResult
 
 def getModelMeasureByModel(data,model):
     return getModelMeasure(data,model.labels_)
@@ -60,6 +60,12 @@ def preprocessingData(data):
     descriptData(data)
     return data
 
+def Models():
+    models = []
+    models.append(('KMeans',createKMeans))
+    models.append(('DBSCAN',createAgglomerate))
+    return models
+
 def trainModel(dataName,data,N=11): 
     data = preprocessingData(data)
     
@@ -71,7 +77,7 @@ def trainModel(dataName,data,N=11):
             modelName='KMeans'       
             model = createKMeans(i)
         else:
-            modelName='Agglomerate'       
+            modelName='Agglomerative'       
             model = createAgglomerate(i)
         
         t = time()
@@ -89,13 +95,13 @@ def trainModel(dataName,data,N=11):
         #print('cluster_labels=',np.unique(model.labels_))
 
     #print(df)
+    df.to_csv(r'./db/' + modelName + '_result.csv',index=True)
     
-    plotModelCSM(modelName,df)
-    
-    index,bestK = getBestkFromCSM(dataName,modelName,df)
-    bestLine = df.iloc[index,:]
+    #plotModelCSM(modelName,df)
+    #index,bestK = getBestkFromCSM(dataName,modelName,df)
+    #bestLine = df.iloc[index,:]
     #print('bestLine=',index,'bestK=',bestK,'df=\n',bestLine)
-    return bestLine
+    #return bestLine
     
 def getBestkFromCSM(datasetName,modelName,df):
     print('df=\n',df)
@@ -108,9 +114,14 @@ def getBestkFromCSM(datasetName,modelName,df):
     return index,bestK
     
 def prepareDataSet():
-    df = getCsv('./db/petIotRecordsAll.csv')
-    df = df.loc[:,['latitude','longitude']]
-    #df = df[:100]
+    if 0:
+        df = getCsv('./db/petIotRecordsAll.csv')
+        df = df.loc[:,['latitude','longitude']]
+        #df = df[:100]
+    else:
+        df = getCsv('./db/statistic_result.csv')
+        df = df.loc[:,['latitude_center','longitude_center']]
+    
     return df
 
 #cluster: 0 latitude: -36.8542531 longitude 174.76641334
@@ -127,13 +138,18 @@ def getCulteredCentroid(rawData, labels):
     centroids = []
     for i in cluster_labels:
         lines = np.where(labels == i)
-        #print(i,len(lines[0].flatten()))
+        print(i,len(lines[0].flatten()))
         #print(lines[0])
         data = rawData.iloc[lines[0],:]
         #print(data)
-        latitudeCenter = round(np.mean(data['latitude']),8)
-        longitudeCenter = round(np.mean(data['longitude']),8)
-        #print('cluster:',i,'latitude:', latitudeCenter,'longitude', longitudeCenter)
+        if 0:
+            latitudeCenter = round(np.mean(data['latitude']),8)
+            longitudeCenter = round(np.mean(data['longitude']),8)
+        else:
+            latitudeCenter = round(np.mean(data['latitude_center']),8)
+            longitudeCenter = round(np.mean(data['longitude_center']),8)
+            
+        print('cluster:',i,'latitude:', latitudeCenter,'longitude', longitudeCenter)
         centroids.append([latitudeCenter,longitudeCenter])
     return centroids
       
@@ -155,10 +171,12 @@ def train(rawData):
     centroids = getCulteredCentroid(rawData,model.labels_)
     print('centroids=',centroids)
     
+    plotCLusteringResult(rawData,model.labels_)
+    
 def main():
     rawData = prepareDataSet()
-    trainModel('petGPSLocation',rawData)
-    #train(rawData)
+    #trainModel('petGPSLocation',rawData)
+    train(rawData)
     
 if __name__ == "__main__":
     main()

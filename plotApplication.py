@@ -14,7 +14,7 @@ def plotModelCSM(modelName,df): #CSM
     #plt.figure(figsize=(8,5))
     ax = plt.subplot(1,1,1)
     title = modelName + '_CSM'
-    plt.title(title)
+    #plt.title(title)
     plotSub(x,csm,ax,label='CSM')
     
     plt.xticks(np.arange(1, 12))
@@ -25,12 +25,41 @@ def plotModelCSM(modelName,df): #CSM
     plt.savefig(gRes+title+'.png')
     plt.show()
     
+def plotModelCSMAx(modelName,ax,df,label='',c='b'): #CSM
+    x = df.loc[:,['K']].values #K
+    csm = df.loc[:,['CSM']]
+    
+    #plt.figure(figsize=(8,5))
+    #title = modelName + '_CSM'
+    #plt.title(title)
+    plotSub(x,csm,ax,label=label,c=c)
+    
+    plt.xticks(np.arange(1, 12))
+    ax.set_ylabel('Silhouette coefficient')
+    ax.set_xlabel('K clusters')
+    
+def plotModelTimeTakenAx(modelName,ax,df,label='',c='b'): #CSM
+    x = df.loc[:,['K']].values #K
+    tt = df.loc[:,['tt(s)']]
+    
+    #plt.figure(figsize=(8,5))
+    #title = modelName + '_CSM'
+    #plt.title(title)
+    plotSub(x,tt,ax,label=label,c=c)
+    
+    plt.xticks(np.arange(1, 12))
+    ax.set_ylabel('Time taken(s)')
+    ax.set_xlabel('K clusters')
+    
+    
 def trackingPlot(df,date='2020-06-01'): ##per day
     ax = plt.subplot(1,1,1)
     trackingPlotAx(ax,df,date,title='Pet tracking'+' ' + date)
     plt.legend()
     plt.subplots_adjust(left=0.18, bottom=None, right=None, top=None, wspace=None, hspace=None)
     plt.grid()
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
     plt.savefig(gRes+'locationTracking_'+date+'.png')
     plt.show()
     
@@ -43,7 +72,7 @@ def trackingPlotAx(ax,df,date='2020-06-01',title='Pet tracking'):
     
     #plt.figure(figsize=(8,5))
     #ax.set_title('Pet tracking'+' ' + date)
-    ax.set_title(title)
+    #ax.set_title(title)
     if 1:
         plotSub(lg,lt,ax,label='GPS locations',c='k')
         scatterSub(lg,lt,ax,marker='o',c='b')
@@ -95,7 +124,7 @@ def plotPdColumn(index,data,title,label,color=None,xlabel='',ylabel='',width=0.6
     fontsize = 8
     ax = plt.subplot(1,1,1)
     
-    ax.set_title(title) #,fontsize=fontsize
+    #ax.set_title(title) #,fontsize=fontsize
     #ax.barh(dfWorld.index,dfWorld['Cases'])
     if color:
         ax.bar(index,data,label=label,width=width,color=color)
@@ -134,9 +163,9 @@ def plotWeekDayDistanceAndTimeLen(df):
     dfStatisticWeekDay['timeLen'] =  dfStatisticWeekDay['timeLen']/60
     
     dfStatisticWeekDay.to_csv(r'./db/statistic_weekday_result.csv',index=True)
-    plotPdColumn(dfStatisticWeekDay['weekDay'],dfStatisticWeekDay['timeLen'],title='Pet mean travel time every weekday(miniutes)',label='travel_time',xlabel='WeekDay',ylabel='timeLen',width=0.35)
+    plotPdColumn(dfStatisticWeekDay['weekDay'],dfStatisticWeekDay['timeLen'],title='Pet mean travel time every weekday(miniutes)',label='travel_time',xlabel='WeekDay',ylabel='timeLen(miniutes)',width=0.35)
     #plotPdColumn(dfStatisticWeekDay['weekDay'],dfStatisticWeekDay['temperature_mean'],title='Mean temperature every weekday when pet travel',label='temperature',xlabel='WeekDay',ylabel='temperature')
-    plotPdColumn(dfStatisticWeekDay['weekDay'],dfStatisticWeekDay['distance_weekday'],title='Pet mean travel distance every weekday(meters)',label='weekday_distance',xlabel='WeekDay',ylabel='distance',width=0.35)
+    plotPdColumn(dfStatisticWeekDay['weekDay'],dfStatisticWeekDay['distance_weekday'],title='Pet mean travel distance every weekday(meters)',label='weekday_distance',xlabel='WeekDay',ylabel='distance(meters)',width=0.35)
     
 def plotDateDistanceAndTimeLen(df):
     #df = binaryDf(df,False)
@@ -146,8 +175,8 @@ def plotDateDistanceAndTimeLen(df):
     df = df.iloc[-1*30:,:]
     
     df['timeLen'] =  df['timeLen']/60
-    plotPdColumn(df['date'],df['timeLen'],title='Pet travel time every day(miniutes)',label='travel_time',xlabel='Date',ylabel='timeLen')
-    plotPdColumn(df['date'],df['distance_day'],title='Pet travel distance every day(meters)',label='travel_distance',xlabel='Date',ylabel='distance')
+    plotPdColumn(df['date'],df['timeLen'],title='Pet travel time every day(miniutes)',label='travel_time',xlabel='Date',ylabel='timeLen(miniutes)')
+    plotPdColumn(df['date'],df['distance_day'],title='Pet travel distance every day(meters)',label='travel_distance',xlabel='Date',ylabel='distance(meters)')
     
 def plotTempAndDistance(df):
     def HandelTempAndDistance(df,N=2):
@@ -173,13 +202,13 @@ def plotTempAndDistance(df):
     df = HandelTempAndDistance(df)
     #print(df)
     
-    plot(df['temperature_mean'],df['distance_day'],title='Pet travel Distance vs. temperature ',xlabel='temperature',ylabel='distance')
+    plot(df['temperature_mean'],df['distance_day'],title='Pet travel Distance vs. temperature ',xlabel='temperature',ylabel='distance(meters)')
     
 def plot(x,y,title='',xlabel='',ylabel=''):
     global gIndex
     x = np.linspace(np.min(x),np.max(x),len(y))
     #plt.scatter(x,y)
-    plt.title(title)
+    #plt.title(title)
     plt.plot(x,y)
     plt.xlabel(xlabel)
     plt.ylabel(ylabel)
@@ -193,11 +222,78 @@ def plotAll(df):
     plotTempAndDistance(df)
     pass
 
+def plotClustering():
+    df1 = getCsv('./db/KMeans_result.csv')
+    df2 = getCsv('./db/Agglomerative_result.csv')
+    #plotModelCSM('A',df1)
+    #plotModelCSM('K',df2)
+    
+    ax = plt.subplot(1,1,1)
+    plotModelCSMAx('K',ax,df1,label='K-Means')
+    plotModelCSMAx('A',ax,df2,label='Agglomerative',c='r')
+    ax.legend()
+    ax.grid()
+    plt.savefig(gRes+'KA.png')
+    plt.show()
+    
+    ax = plt.subplot(1,1,1)
+    plotModelTimeTakenAx('K',ax,df1,label='K-Means')
+    plotModelTimeTakenAx('A',ax,df2,label='Agglomerative',c='r')
+    ax.legend()
+    ax.grid()
+    plt.savefig(gRes+'KATt.png')
+    plt.show()
+    
+def plotCLusteringResult(rawData, labels):
+    cluster_labels = np.unique(labels)
+    print('cluster_labels=',cluster_labels)
+    # print(rawData.shape)
+    # print(rawData[:5])
+    # print(labels.shape)
+    # print(labels)
+    ax = plt.subplot(1,1,1)
+    centroids = []
+    for i in cluster_labels:
+        lines = np.where(labels == i)
+        print(i,len(lines[0].flatten()))
+        #print(lines[0])
+        data = rawData.iloc[lines[0],:]
+        #print(data)
+        if 0:
+            latitudeCenter = round(np.mean(data['latitude']),8)
+            longitudeCenter = round(np.mean(data['longitude']),8)
+            x = data['latitude']
+            y = data['longitude']
+        else:
+            latitudeCenter = round(np.mean(data['latitude_center']),8)
+            longitudeCenter = round(np.mean(data['longitude_center']),8)
+            x = data['latitude_center']
+            y = data['longitude_center']
+        #ax.scatter(data['latitude_center'],data['longitude_center'])
+        
+        ax.scatter(x,y)
+        ax.scatter(latitudeCenter,longitudeCenter, s=50, c='lightgreen', marker='s', edgecolor='black', label='cluster center'+str(i))    
+        # if i==0:
+        #     ax.scatter(x,y, s=50, c='lightgreen', marker='s', edgecolor='black', label='cluster 1')    
+        # elif i==1:
+        #     ax.scatter(x,y, s=50, c='orange', marker='o', edgecolor='black', label='cluster 2')    
+        # else:
+        #     ax.scatter(x,y, s=50, c='lightblue', marker='v', edgecolor='black', label='cluster 3') 
+     
+    ax.legend()
+    plt.xlabel('Longitude')
+    plt.ylabel('Latitude')
+    plt.subplots_adjust(left=0.15, bottom=None, right=None, top=None, wspace=None, hspace=None)
+    plt.savefig(gRes+'clusterResut.png')       
+    plt.show()    
+
+    
 def main():
     df = getCsv('./db/statistic_result.csv')
     #print(df)
     plotAll(df)
-        
+    plotClustering()
+    
 if __name__=='__main__':
     main()
     

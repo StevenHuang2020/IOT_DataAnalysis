@@ -94,8 +94,8 @@ def testTracking():
     else:
         dfs = []
         dfs.append(df[df['date'] == '2020-05-01'])
-        dfs.append(df[df['date'] == '2020-05-02'])
-        dfs.append(df[df['date'] == '2020-05-03'])
+        #dfs.append(df[df['date'] == '2020-05-04'])
+        #dfs.append(df[df['date'] == '2020-05-06'])
         trackingCentroidsPlot(dfs,date=first)
         '''
         ax = plt.subplot(1,1,1)
@@ -108,7 +108,7 @@ def testTracking():
         '''
         
 def main():
-    parseAllData()
+    #parseAllData()
     testTracking()
     pass
 

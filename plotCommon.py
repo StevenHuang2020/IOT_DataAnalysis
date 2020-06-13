@@ -13,7 +13,7 @@ def plotSub(x,y,ax=None, aspect=False, label='',c='b',marker='.'):
     #ax.title.set_text(name)
     if aspect:
         ax.set_aspect(1)
-    ax.legend()
+    #ax.legend()
     
 # def plotSub(x,y,ax=None, aspect=False, label='',c='k'):
 #     ax.plot(x,y,label=label,c=c)
