@@ -4,10 +4,11 @@
 
 Data analysis Project: gps and temperature data analyse
 <br/>
-<img src="res/locationTracking_2020-05-01.png" width="320" height="240">
+<img src="res/locationTracking.png" width="320" height="240">
 <img src="res/Statistic_4.png" width="320" height="240">
 <img src="res/KMeans_CSM.png" width="320" height="240">
 <img src="res/locationTracking_WithCenter_2020-05-01.png" width="320" height="240">
+<img src="res/clusterResut.png" width="320" height="240">
 <img src="res/Statistic_3.png" width="320" height="240">
 <img src="res/Statistic_0.png" width="320" height="240">
 
