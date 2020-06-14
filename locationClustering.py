@@ -63,7 +63,7 @@ def preprocessingData(data):
 def Models():
     models = []
     models.append(('KMeans',createKMeans))
-    models.append(('DBSCAN',createAgglomerate))
+    models.append(('Agglomerative',createAgglomerate))
     return models
 
 def trainModel(dataName,data,N=11): 
