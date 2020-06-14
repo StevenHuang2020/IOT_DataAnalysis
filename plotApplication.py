@@ -171,8 +171,11 @@ def plotDateDistanceAndTimeLen(df):
     #df = binaryDf(df,False)
     print(df.shape)
     
-    days = 30
-    df = df.iloc[-1*30:,:]
+    days = df.shape[0]
+    if days>30:
+        days =30
+        
+    df = df.iloc[-1*days:,:]
     
     df['timeLen'] =  df['timeLen']/60
     plotPdColumn(df['date'],df['timeLen'],title='Pet travel time every day(miniutes)',label='travel_time',xlabel='Date',ylabel='timeLen(miniutes)')
@@ -199,7 +202,7 @@ def plotTempAndDistance(df):
 
     #df = binaryDf(df,False)
     df = df.loc[:,['temperature_mean','distance_day']]
-    df = HandelTempAndDistance(df)
+    #df = HandelTempAndDistance(df)
     #print(df)
     print('min=',np.min(df['temperature_mean']),'max=',np.max(df['temperature_mean']))
     
@@ -218,8 +221,8 @@ def plot(x,y,title='',xlabel='',ylabel=''):
     plt.show()
     
 def plotAll(df):
-    #plotDateDistanceAndTimeLen(df)
-    #plotWeekDayDistanceAndTimeLen(df)
+    plotDateDistanceAndTimeLen(df)
+    plotWeekDayDistanceAndTimeLen(df)
     plotTempAndDistance(df)
     pass
 

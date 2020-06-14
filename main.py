@@ -109,7 +109,7 @@ def testTracking():
         
 def main():
     parseAllData()
-    testTracking()
+    #testTracking()
     pass
 
 if __name__=='__main__':

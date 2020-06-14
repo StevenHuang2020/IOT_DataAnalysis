@@ -145,7 +145,7 @@ def generateAll(days=60):
     df = generateData(days=days)
     writeToCsv(df,file)
     
-def generateData(startDate='2020-04-01',days=60,everydayLine=250,intersecond=12):
+def generateData(startDate='2020-05-27',days=60,everydayLine=250,intersecond=12):
     time = '09:30:00'
     sDate=datetime.datetime.strptime(startDate,'%Y-%m-%d')
     
@@ -175,7 +175,7 @@ def main():
     #a = noise(N=100,b=0.005)
     #print(a)
     #getTimeLen('09:30:00','09:32:23')
-    generateAll(days=60)#60
+    generateAll(days=20)#60
     pass
     
 if __name__=='__main__':
