@@ -65,8 +65,8 @@ def parseAllData():
     
     dfStatisticDay = pd.DataFrame()
     for i in dates:
-        #print(i)
         dfDay = df[df['date'] == i]
+        print(i,dfDay.shape[0])
         line = HandleOneDayData(i,dfDay)
         dfStatisticDay = dfStatisticDay.append(line,ignore_index=True)
         
@@ -108,7 +108,7 @@ def testTracking():
         '''
         
 def main():
-    #parseAllData()
+    parseAllData()
     testTracking()
     pass
 

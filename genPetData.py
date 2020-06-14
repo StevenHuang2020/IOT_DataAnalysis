@@ -27,7 +27,7 @@ def getRandomLenFromDate(date,N=200):
     values = [0.2, 0.15, 0.2, 0.3, 0.32, 0.5, 0.6 ]
     index = weekdays.index(weekDay)
     len = int((values[index] + randomSymbol(1)*noise(b=0.12))*N)
-    print('len=',len)
+    #print('len=',len)
     return len
 
 def getRandomTempFromDate(date,N=5):
@@ -36,8 +36,8 @@ def getRandomTempFromDate(date,N=5):
     
     values = [0.2, 0.4, 0.2, 0.3, 0.32, 0.4, 0.5 ]
     index = int(days)%len(values)
-    temp = values[index]*N
-    #print('temp=',temp)
+    temp = values[index]*N*randomSymbol(1)
+    print('temp=',temp)
     return temp
 
 def randomSymbol(length): #-1,1,1,-1,1,-1...
@@ -145,7 +145,7 @@ def generateAll(days=60):
     df = generateData(days=days)
     writeToCsv(df,file)
     
-def generateData(startDate='2020-05-01',days=60,everydayLine=250,intersecond=12):
+def generateData(startDate='2020-04-01',days=60,everydayLine=250,intersecond=12):
     time = '09:30:00'
     sDate=datetime.datetime.strptime(startDate,'%Y-%m-%d')
     

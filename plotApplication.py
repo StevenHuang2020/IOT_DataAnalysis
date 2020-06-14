@@ -180,7 +180,7 @@ def plotDateDistanceAndTimeLen(df):
     
 def plotTempAndDistance(df):
     def HandelTempAndDistance(df,N=2):
-        #print(df.shape,df.columns)
+        print(df.shape,df.columns)
         df = df.sort_values(by=['temperature_mean'],ascending=True)
         #print(df[:5])
         columns = df.columns
@@ -201,6 +201,7 @@ def plotTempAndDistance(df):
     df = df.loc[:,['temperature_mean','distance_day']]
     df = HandelTempAndDistance(df)
     #print(df)
+    print('min=',np.min(df['temperature_mean']),'max=',np.max(df['temperature_mean']))
     
     plot(df['temperature_mean'],df['distance_day'],title='Pet travel Distance vs. temperature ',xlabel='temperature',ylabel='distance(meters)')
     
@@ -217,8 +218,8 @@ def plot(x,y,title='',xlabel='',ylabel=''):
     plt.show()
     
 def plotAll(df):
-    plotDateDistanceAndTimeLen(df)
-    plotWeekDayDistanceAndTimeLen(df)
+    #plotDateDistanceAndTimeLen(df)
+    #plotWeekDayDistanceAndTimeLen(df)
     plotTempAndDistance(df)
     pass
 
@@ -292,7 +293,7 @@ def main():
     df = getCsv('./db/statistic_result.csv')
     #print(df)
     plotAll(df)
-    plotClustering()
+    #plotClustering()
     
 if __name__=='__main__':
     main()
